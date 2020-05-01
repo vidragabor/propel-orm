@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore" namespace="PropelSample" identifierQuoting="true">
+  <table name="contract" idMethod="native" phpName="Contract">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="identifier" phpName="Identifier" type="VARCHAR" size="20" required="true" defaultValue=""/>
+    <column name="amount" phpName="Amount" type="BIGINT" required="true"/>
+    <column name="details" phpName="Details" type="LONGVARCHAR"/>
+    <column name="valid_from" phpName="ValidFrom" type="DATE" required="true"/>
+    <column name="valid_to" phpName="ValidTo" type="DATE"/>
+    <column name="file" phpName="File" type="BLOB"/>
+    <column name="status" phpName="Status" type="CHAR" sqlType="enum('under preparation','done')" required="true"/>
+    <column name="created_at" phpName="CreatedAt" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="modified_at" phpName="ModifiedAt" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="customer_id" phpName="CustomerId" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="customer" name="contract_ibfk_1">
+      <reference local="customer_id" foreign="id"/>
+    </foreign-key>
+    <index name="customer">
+      <index-column name="customer_id"/>
+    </index>
+    <unique name="identifier">
+      <unique-column name="identifier"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="customer" idMethod="native" phpName="Customer">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="address" phpName="Address" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="type_id" phpName="TypeId" type="INTEGER" required="true"/>
+    <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="type" name="customer_ibfk_1">
+      <reference local="type_id" foreign="id"/>
+    </foreign-key>
+    <index name="type">
+      <index-column name="type_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="group" idMethod="native" phpName="Group">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="payment" idMethod="native" phpName="Payment">
+    <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="identifier" phpName="Identifier" type="VARCHAR" size="30" required="true" defaultValue=""/>
+    <column name="bank_name" phpName="BankName" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="amount" phpName="Amount" type="BIGINT" required="true"/>
+    <column name="details" phpName="Details" type="VARCHAR" sqlType="json" required="true"/>
+    <column name="contract_id" phpName="ContractId" type="INTEGER"/>
+    <foreign-key foreignTable="contract" name="payment_ibfk_1" onDelete="SET NULL">
+      <reference local="contract_id" foreign="id"/>
+    </foreign-key>
+    <index name="contract">
+      <index-column name="contract_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="type" idMethod="native" phpName="Type">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="user" idMethod="native" phpName="User">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="email" phpName="Email" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="password" phpName="Password" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="first_name" phpName="FirstName" type="VARCHAR" size="255"/>
+    <column name="last_name" phpName="LastName" type="VARCHAR" size="255"/>
+    <column name="login_counter" phpName="LoginCounter" type="INTEGER" required="true" defaultValue="0"/>
+    <column name="blocked" phpName="Blocked" type="BOOLEAN" size="1" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="user_group" idMethod="native" phpName="UserGroup">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" required="true"/>
+    <column name="group_id" phpName="GroupId" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="user" name="user_group_ibfk_1">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="group" name="user_group_ibfk_2">
+      <reference local="group_id" foreign="id"/>
+    </foreign-key>
+    <index name="user">
+      <index-column name="user_id"/>
+    </index>
+    <index name="group">
+      <index-column name="group_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+</database>

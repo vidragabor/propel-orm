@@ -1,0 +1,31 @@
+# https://docs.docker.com/compose/compose-file/
+
+version: '3.7'
+
+services:
+  web:
+    image: php:7.3-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php-web
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - "8100:80"
+    env_file:
+      - ./environment/common.env
+    stdin_open: true
+    tty: true
+  db:
+    image: mysql:5.7
+    container_name: db-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: propelorm
+      MYSQL_USER: propel
+      MYSQL_PASSWORD: pw1234
+    ports:
+      - "3306:3306"

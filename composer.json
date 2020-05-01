@@ -1,0 +1,10 @@
+{
+    "require": {
+        "propel/propel": "~2.0@dev",
+        "ircmaxell/password-compat": "^1.0",
+        "smarty/smarty": "~3.1"
+    },
+    "autoload": {
+        "classmap": ["model/"]
+    }
+}

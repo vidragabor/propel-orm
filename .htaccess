@@ -1,0 +1,12 @@
+DirectoryIndex /source/index.php
+
+RewriteEngine on
+RewriteBase /source/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^error error.php
+
+RewriteRule ^user/(.*) user.php?param=$1
+
+ErrorDocument 404 /error
